@@ -12,7 +12,7 @@ function defineReactive (data, key, value) {
   const dep = new Dep()
   Object.defineProperty(data, key, {
     get: () => {
-      Dep.target && dep.addSub(Dep.target)
+      Dep.target && dep.addSub(Dep.target) // 将订阅者添加到订阅器里面
       return value
     },
     set: (newVal) => {
@@ -41,24 +41,7 @@ Dep.prototype = {
 Dep.target = null
 
 
-// 实现订阅者
-function Watcher (vm, node, name) {
-  Dep.target = this // 缓存自己
-  this.vm = vm
-  this.node = node
-  this.name = name
-  this.update()
-  Dep.target = null // 释放自己
-}
-Watcher.prototype = { // 原型中的方法，不可更改为箭头函数，不然this的指向是window，而不是当前构造函数
-  update: function () {
-    this.get()
-    this.node.nodeValue = this.value
-  },
-  get: function () {
-    this.value = this.vm[this.name]
-  }
-}
+
 
 // 解析器 解析Dom节点
 // 对Dom节点的操作频繁，所以将所有的dom节点存入fragment片段里再进行处理
@@ -102,7 +85,24 @@ function compile (node, vm) {
   }
 }
 
-
+// 实现订阅者
+function Watcher (vm, node, name) {
+  Dep.target = this // 缓存自己
+  this.vm = vm
+  this.node = node
+  this.name = name
+  this.update()
+  Dep.target = null // 释放自己
+}
+Watcher.prototype = { // 原型中的方法，不可更改为箭头函数，不然this的指向是window，而不是当前构造函数
+  update: function () {
+    this.get()
+    this.node.nodeValue = this.value // 在这里赋值，可实时更新
+  },
+  get: function () {
+    this.value = this.vm[this.name] // 调用observer中的get方法，将该订阅者添加到主题对象（订阅器中）
+  }
+}
 // vue的构造函数
 function Vue (options) {
   const {el, data} = options

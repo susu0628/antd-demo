@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    div {
+      width: 100px;
+      height: 100px;
+      position: absolute;
+    }
+    #one {
+      background-color: red;
+      top: 0px;
+      left: 20px;
+    }
+    #two {
+      background-color: pink;
+      top: 20px;
+      left: 40px;
+      z-index: 1;
+    }
+    #three {
+      background-color: teal;
+      top: 40px;
+      left: 60px;
+    }
+    #four {
+      background-color: yellow;
+      z-index: 2;
+    }
+  </style>
+</head>
+<body>
+  <div id="one">
+    <div id="two"></div>
+    <div id="three"></div>
+  </div>
+  <div id="four"></div>
+</body>
+</html>
+<!-- 
+  zIndex 
+  ① 针对定位元素才生效
+  ② 同一层级比较Z-index 比较one 以及 four 只要four 大于 one 的z-index, 那么，无论 two 以及 three 的值比four大多少 ，它们都在four的下面
+ -->

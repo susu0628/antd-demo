@@ -120,6 +120,48 @@ function resolvePromise (promise2, x, resolve, reject) {
   }
 }
 
+// resolve方法
+Promise.resolve = (value) => {
+  return new Promise((resolve, reject) => {
+    resolve(value)
+  })
+}
+
+// reject方法
+Promise.reject = (reason) => {
+  return new Promise((resolve, reject) => {
+    reject(reason)
+  })
+}
+
+// race
+Promise.race = (promiseArray) => {
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < promiseArray.length; i++) {
+      promiseArray[i].then(resolve, reject)
+    }
+  })
+}
+
+// all
+Promise.all = (promiseArray) => {
+  return new Promise((resolve, reject) => {
+    let promiseAllData = []
+    let i = 0
+    const getFormData = (index, value) => {
+      promiseAllData[index] = value
+      i++
+      if (i === promiseArray.length) {
+        resolve(promiseAllData)
+      }
+    }
+    for (let i = 0; i < promiseArray.length; i++) {
+      promiseArray[i].then((value) => {
+        getFormData(i, value)
+      }, reject)
+    }
+  })
+}
 // 测试
 new Promise((resolve, reject) => {
   setTimeout(() => {
@@ -133,4 +175,35 @@ new Promise((resolve, reject) => {
   })
 }).then((value) => {
   console.log('then2', value)
+})
+
+// 测试resolve
+Promise.resolve(2).then((value) => {
+  console.log('value', value)
+})
+// 测试reject
+Promise.reject(2).then((value) => {
+  console.log('value2', value)
+}, (err) => {
+  console.log('error', err)
+})
+
+// 测试race
+const p1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('500ms')
+  }, 500);
+})
+const p2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('800ms')
+  }, 800);
+})
+Promise.race([p2, p1]).then((value) => {
+  console.log('race', value)
+})
+
+// 测试all
+Promise.all([p2, p1]).then((value) => {
+  console.log('all', value)
 })

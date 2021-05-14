@@ -6,21 +6,22 @@ new Promise((resolve, reject) => {
   }, 500);
 }).then((value) => {
   console.log(454545)
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(value + '23')
-    }, 2000);
-  })
+  return value + 'then'
+  // return new Promise((resolve, reject) => {
+  //   setTimeout(() => {
+  //     resolve(value + '23')
+  //   }, 2000);
+  // })
 }).then((value) => {
   console.log('then2', value)
 })
 
 // 测试resolve
 Promise.resolve(2).then((value) => {
-  console.log('value', value)
+  console.log('resolve', value)
 })
 Promise.reject(2).then((value) => {
-  console.log('value2', value)
+  console.log('reject', value)
 }, (err) => {
   console.log('error', err)
 })
